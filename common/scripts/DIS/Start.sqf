@@ -2,8 +2,8 @@ sleep 1;
 
 disReg = [];
 
-DIS_fnc_IsSAM = compile preprocessFile"scripts\DIS\SAM\IsSAM.sqf";
-DIS_fnc_RegisterSAM = compile preprocessFile"scripts\DIS\SAM\RegisterSAM.sqf";
+DIS_fnc_IsSAM = compile preprocessFile"common\scripts\DIS\SAM\IsSAM.sqf";
+DIS_fnc_RegisterSAM = compile preprocessFile"common\scripts\DIS\SAM\RegisterSAM.sqf";
 
 private _units = [];
 private _isSAM = false;

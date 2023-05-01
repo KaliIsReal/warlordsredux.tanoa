@@ -5,7 +5,7 @@ private _indicator=_this select 3;
 if(dapsDebug)then{
 	//"DAPS REPORT"remoteExec["systemChat"];
 	systemChat"DAPS REPORT";
-	execVM"scripts\DAPS\Scripts\Report\DetailedReport.sqf";
+	execVM"common\scripts\DAPS\Scripts\Report\DetailedReport.sqf";
 	sleep 2;
 };
 if!((vehicle player)==_v)exitWith{};

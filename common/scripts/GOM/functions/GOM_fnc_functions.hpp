@@ -8,8 +8,8 @@ class GOM
 
 	{
 
-		class aircraftLoadoutParameters{file = "scripts\GOM\functions\GOM_fnc_aircraftLoadoutParameters.sqf";preInit = 1;};
-		class aircraftLoadoutInit{file = "scripts\GOM\functions\GOM_fnc_aircraftLoadoutInit.sqf";preInit = 1;};
+		class aircraftLoadoutParameters{file = "common\scripts\GOM\functions\GOM_fnc_aircraftLoadoutParameters.sqf";preInit = 1;};
+		class aircraftLoadoutInit{file = "common\scripts\GOM\functions\GOM_fnc_aircraftLoadoutInit.sqf";preInit = 1;};
 
 	};
 

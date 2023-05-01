@@ -16,8 +16,8 @@ class Extended_PostInit_EventHandlers
 	dapsInit="execVM'\scripts\DAPS\Scripts\Start.sqf'";
 };
 
-#include "\scripts\DAPS\Menu\zCoreDefines.hpp"
-#include "\scripts\DAPS\Menu\Dialog.hpp"
+#include "common\scripts\DAPS\Menu\zCoreDefines.hpp"
+#include "common\scripts\DAPS\Menu\Dialog.hpp"
 
 
 class cfgAmmo
@@ -141,7 +141,7 @@ class CfgFunctions
 		tag="DAPS";
 		class Start
 		{
-			file="\scripts\DAPS\functions";
+			file="common\scripts\DAPS\functions";
 			class AssignAPS{};
 			class ForceRecheck{};
 			//class ClearAllAPS{};

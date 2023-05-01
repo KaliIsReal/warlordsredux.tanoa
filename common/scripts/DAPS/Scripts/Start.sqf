@@ -26,7 +26,7 @@ if !(isClass(configFile >> "cfgPatches" >> "DrongosAPS")) then {
 };
 
 private _module = objNull;
-dapsScriptWait = execVM "scripts\DAPS\Scripts\DefineVehicles.sqf";
+dapsScriptWait = execVM "common\scripts\DAPS\Scripts\DefineVehicles.sqf";
 waitUntil { scriptDone dapsScriptWait };
 
 if (count (entities "DAPS_Options") > 0) then {
@@ -57,7 +57,7 @@ dapsSingle=[];
 dapsDouble=[];
 // All vehicles with APS
 dapsAPStypes=[];
-DAPS_fnc_CompileTypes = compile preprocessFile "scripts\DAPS\Scripts\Management\fn_CompileTypes.sqf";
+DAPS_fnc_CompileTypes = compile preprocessFile "common\scripts\DAPS\Scripts\Management\fn_CompileTypes.sqf";
 call DAPS_fnc_CompileTypes;
 // Projectiles that have been dazzled
 dapsDazzled=[];

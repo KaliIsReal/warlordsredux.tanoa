@@ -27,7 +27,7 @@ if!(_indicator)exitWith{
 if(_d<1)then{_d=1};
 _d=ceil(_d/22.5);
 _colour="#999999";
-_pic=format["scripts\DAPS\Pics\dir%1.paa",_d];
+_pic=format["common\scripts\DAPS\Pics\dir%1.paa",_d];
 playSound"Alarm";
 hintSilent(parseText format["<img size='7' color='%1' img image='%2'/><br/><br/>%3",_colour,_pic,_text]);
 sleep 3;

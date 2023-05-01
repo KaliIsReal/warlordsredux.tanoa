@@ -116,7 +116,7 @@ fadeout = 0;
 			colorText[] = {1,1,1,1};
 			
 			//	Image
-			text = "scripts\GF_Earplugs\images\Earmuffs_3.paa"; 
+			text = "common\scripts\GF_Earplugs\images\Earmuffs_3.paa"; 
 			lineSpacing = 0; 
 		}; 
 	}; 
