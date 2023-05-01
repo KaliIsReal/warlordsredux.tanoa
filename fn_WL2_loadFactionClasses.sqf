@@ -1,4 +1,3 @@
-#include "common\warlords_constants.inc"
 
 BIS_WL_factionUnitClasses = [
 	[
