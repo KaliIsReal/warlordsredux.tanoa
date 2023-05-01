@@ -194,57 +194,15 @@ class CfgFunctions {
 	};	
 	class DAPS
 	{
-		class MISC
-		{
-			file = "common\scripts\DAPS\Scripts\Misc";
-			class MisguideMissile {};
-		};
-	};
-	/* Keep for later if needed	
-	class DAPS
-	{
 		class APS 
 		{
 			file = "common\scripts\DAPS\Scripts\APS";
-			class Afganit {};
-			class Afganit2 {};
-			class AMAP {};
-			class AMAP2 {};
-			class APSAfganit {};
-			class APSAfganitE {};
-			class APSAMAP {};
-			class APSArena {};
 			class APSDazzler {};
-			class APSDrozd {};
-			class APSDrozd2 {};
 			class APSheavy {};
-			class APSironFist {};
 			class APSlight {};
 			class APSmedium {};
-			class APSTrophyHV {};
-			class APSTrophyHVe {};
-			class APSTrophyLV {};
-			class Arena {};
 			class Dazzler {};
-			class Drozd {};
-			class Drozd2 {};
 			class Generic {};
-			class IronFist {};
-			class TrophyHV {};
-			class TrophyHVe {};
-			class TrophyHVe2 {};
-			class TrophyLV {};
-			class TrophyMV {};
-		};
-		class DIRCM
-		{
-			file = "common\scripts\DAPS\Scripts\DIRCM";
-			class MisguideSAM {};
-			class Nemesis {};
-			class Nemesis2 {};
-			class Report {};
-			class Vitebsk {};
-			class Vitebsk2 {};
 		};
 		class Management
 		{
@@ -254,14 +212,13 @@ class CfgFunctions {
 			class CustomAmmo {};
 			class ForceRecheck {};
 			class KeyPressed {};
-			class KeyPressed2 {};
 			class RearmAPS {};
 			class RegisterAll {};
 			class RegisterLoop {};
-			class RegisterNewType {};
 			class RegisterVehicle {};
+			class CompileTypes {};
 		};
-		class Misc
+		class MISC
 		{
 			file = "common\scripts\DAPS\Scripts\Misc";
 			class Active {};
@@ -288,7 +245,7 @@ class CfgFunctions {
 			class RelDir2 {};
 			class RelPos {};
 			class Time {};
-		}:
+		};
 		class Report
 		{
 			file = "common\scripts\DAPS\Scripts\Report";
@@ -297,27 +254,6 @@ class CfgFunctions {
 			class Report {};
 			class ReportRearm {};
 		};
-	};
-	*/
-};
-
-//Advanced Sling Load Mod
-class CfgRemoteExec
-{
-	class Functions
-	{
-		class ASL_Pickup_Ropes { allowedTargets=0; };
-		class ASL_Deploy_Ropes_Index { allowedTargets=0; };
-		class ASL_Rope_Set_Mass { allowedTargets=0; };
-		class ASL_Extend_Ropes { allowedTargets=0; };
-		class ASL_Shorten_Ropes { allowedTargets=0; };
-		class ASL_Release_Cargo { allowedTargets=0; };
-		class ASL_Retract_Ropes { allowedTargets=0; };
-		class ASL_Deploy_Ropes { allowedTargets=0; };
-		class ASL_Attach_Ropes { allowedTargets=0; };
-		class ASL_Drop_Ropes { allowedTargets=0; };
-		class ASL_Hint { allowedTargets=1; };
-		class ASL_Hide_Object_Global { allowedTargets=2; };
 	};
 };
 
@@ -357,6 +293,46 @@ wreckRemovalMaxTime = 240; //120
 
 minPlayerDistance = WL_ASSET_REMOVAL_SAFEZONE;
 
+class CfgSounds {
+	//playSoundUI ["class", 1, 1];
+
+	class altWarning {
+        name="altitude warning";
+        sound[]={"common\sounds\altSound.ogg", 1, 1};
+        titles[] = {};	
+	};
+
+	class pullUp {
+        name="Pull up";
+        sound[]={"common\sounds\pullUpSound.ogg", 1, 1};
+        titles[] = {};	
+	};
+
+	class bingoFuel {
+        name="Fuel low";
+        sound[]={"common\sounds\bingoSound.ogg", 1, 1};
+        titles[] = {};	
+	};
+	
+	class radarLock {
+        name="Visible on radar";
+        sound[]={"common\sounds\onSensorSound.ogg", 1, 1};
+        titles[] = {};	
+	};	
+
+	class radarTargetNew {
+        name="New radar target";
+        sound[]={"common\sounds\newTargetSound.ogg", 1, 1};
+        titles[] = {};	
+	};	
+
+	class radarTargetLost {
+        name="Lost radar target";
+        sound[]={"common\sounds\lostTargetSound.ogg", 1, 1};
+        titles[] = {};	
+	};
+};
+
 class CfgDebriefing
 {
 	class BIS_WLVictoryGUER
@@ -374,6 +350,15 @@ class CfgDebriefing
 		picture = "n_installation";
 		pictureBackground = "\A3\Map_Altis\data\ui_Altis_ca.paa";
 		pictureColor[] = {0,0.5,0,1};
+	};
+	class imbalance
+	{
+		title = $STR_A3_debriefing_imbalance_title;
+		subtitle = $STR_A3_debriefing_imbalance_title;
+		description = $STR_A3_debriefing_imbalance_desription;
+		picture = "n_installation";
+		pictureBackground = "common\img\wl_logo_ca.paa";
+		pictureColor[] = {0,0,0,1};
 	};
 };
 
