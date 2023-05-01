@@ -93,7 +93,7 @@ class CfgWLRequisitionPresets
 			class Defences
 			{
 				
-				class Land_BagFence_Round_F					{cost = 250;	requirements[]={};	offset[]={0, 2, 0};};	// "Semi Circle Sand bags"  
+				class Land_BagFence_01_round_green_F		{cost = 250;	requirements[]={};	offset[]={0, 2, 0};};	// "Semi Circle Sand bags"  
 				class Land_Razorwire_F						{cost = 250;	requirements[]={};	offset[]={0, 5, 0};};	// "Razor Wire Fence"  
 				class Land_DragonsTeeth_01_1x1_new_F		{cost = 300;	requirements[]={};	offset[]={0, 2, 0};};	// "Tank barrier"    	
 				//class Land_Cargo_Patrol_V1_F				{cost = 500;	requirements[]={};	offset[]={0, 7, 0};};	// "Military Cargo Post (Green)"    	
@@ -205,11 +205,11 @@ class CfgWLRequisitionPresets
 			class Defences
 			{
 				
-				class Land_BagFence_Round_F					{cost = 250;	requirements[]={};	offset[]={0, 2, 0};};	// "Semi Circle Sand bags"  
+				class Land_BagFence_01_round_green_F		{cost = 250;	requirements[]={};	offset[]={0, 2, 0};};	// "Semi Circle Sand bags"  
 				class Land_Razorwire_F						{cost = 250;	requirements[]={};	offset[]={0, 5, 0};};	// "Razor Wire Fence"  
 				class Land_DragonsTeeth_01_1x1_new_F		{cost = 300;	requirements[]={};	offset[]={0, 2, 0};};	// "Tank barrier"    	
 				//class Land_Cargo_Patrol_V1_F				{cost = 500;	requirements[]={};	offset[]={0, 7, 0};};	// "Military Cargo Post (Green)"    	
-				class CamoNet_OPFOR_big_F					{cost = 250;	requirements[]={};	offset[]={0, 6, 0};};	// "Camouflage Vehicle Cover (Hex)"    	
+				class CamoNet_ghex_big_F					{cost = 250;	requirements[]={};	offset[]={0, 6, 0};};	// "Camouflage Vehicle Cover (Hex)"    	
 				class Land_IRMaskingCover_01_F				{cost = 500;	requirements[]={};	offset[]={0, 8, 0};};	// "IR Masking Tent (Large)"
 				//class Land_DragonsTeeth_01_4x2_new_F		{cost = 800;	requirements[]={};	offset[]={0, 4, 0};};	// "Dragon's Teeth (Row, new)"  
 				class O_HMG_01_F							{cost = 300;	requirements[]={};	};	// "Mk30 HMG .50"  
