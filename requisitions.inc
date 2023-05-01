@@ -196,7 +196,7 @@ class CfgWLRequisitionPresets
 				class Box_T_East_Ammo_F						{cost = 50;		requirements[]={};	};	// "Basic Ammo [CSAT]"
 				class Box_East_Grenades_F					{cost = 50;		requirements[]={};	};	// "Grenades [CSAT]"
 				class Box_East_Wps_F						{cost = 100;	requirements[]={};	};	// "Basic Weapons [CSAT]"
-				class Box_T_East_AmmoOrd_F					{cost = 300;	requirements[]={};	};	// "Explosives [CSAT]"
+				class Box_East_AmmoOrd_F					{cost = 300;	requirements[]={};	};	// "Explosives [CSAT]"
 				class Box_East_WpsLaunch_F					{cost = 250;	requirements[]={};	};	// "Launchers [CSAT]"
 				class Box_T_East_WpsSpecial_F				{cost = 400;	requirements[]={};	};	// "Special Weapons [CSAT]"
 				class O_supplyCrate_F						{cost = 500;	requirements[]={};	};	// "Supply Box [CSAT]"
