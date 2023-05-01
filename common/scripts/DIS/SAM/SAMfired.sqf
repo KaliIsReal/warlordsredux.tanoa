@@ -11,5 +11,5 @@ private _airlock = getNumber(configfile >> "CfgAmmo" >> _ammo >> "airLock");
 private _thrust = getNumber(configfile >> "CfgAmmo" >> _ammo >> "thrust");
 if ((_airlock == 0) AND (_thrust == 0)) exitWith {};
 [_missile, _unit] execVM "scripts\DIS\SAM\Frag.sqf";
-[_missile, (assignedTarget _unit), 1000] execVM "scripts\DIS\SAM\SAManeuver.sqf";
+[_missile, (assignedTarget _unit), 1000] execVM "common\scripts\DIS\SAM\SAManeuver.sqf";
 systemChat "SAM away";
