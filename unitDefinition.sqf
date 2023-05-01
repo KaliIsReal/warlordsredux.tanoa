@@ -1,53 +1,53 @@
 
 BIS_WL_factionUnitClasses = [
 	[
-		"B_Soldier_F",			5, //rifleman, default 100
-		"B_Soldier_GL_F",		70, //Grenadir, default 80
-		"B_soldier_AR_F",		40, //Autorifleman, default 70
-		"B_soldier_AAR_F",		15, //Asst Autorifleman, default 70
-		"B_Soldier_TL_F",		5, //Team leader. default 30
-		"B_soldier_M_F",		30, //Marksman, default 20
-		"B_soldier_LAT_F",		10, //PCML, default 20
-		"B_soldier_LAT2_F",		50, //MAAWS? , default 20
-		"B_Soldier_A_F",		5, //Ammo, default 20
-		"B_Soldier_SL_F",		15, //Squad leader, default 15
-		"B_medic_F",			15, //Medic, default 15
-		"B_soldier_repair_F",	5, //Repair, default 15
-		"B_soldier_AT_F",		25, //Titan AT, default 15
-		"B_soldier_AA_F",		25, //Titan AA, default 15
-		"B_engineer_F",			5, //engineer, default 15
-		"B_soldier_AAT_F",		5, //Asst AT, default 15
-		"B_soldier_AAA_F",		5, //Asst AA, default 15
+		"B_T_Soldier_F",			5, //rifleman, default 100
+		"B_T_Soldier_GL_F",		70, //Grenadir, default 80
+		"B_T_soldier_AR_F",		40, //Autorifleman, default 70
+		"B_T_soldier_AAR_F",		15, //Asst Autorifleman, default 70
+		"B_T_Soldier_TL_F",		5, //Team leader. default 30
+		"B_T_soldier_M_F",		30, //Marksman, default 20
+		"B_T_soldier_LAT_F",		10, //PCML, default 20
+		"B_T_soldier_LAT2_F",		50, //MAAWS? , default 20
+		"B_T_Soldier_A_F",		5, //Ammo, default 20
+		"B_T_Soldier_SL_F",		15, //Squad leader, default 15
+		"B_T_medic_F",			15, //Medic, default 15
+		"B_T_soldier_repair_F",	5, //Repair, default 15
+		"B_T_soldier_AT_F",		25, //Titan AT, default 15
+		"B_T_soldier_AA_F",		25, //Titan AA, default 15
+		"B_T_engineer_F",			5, //engineer, default 15
+		"B_T_soldier_AAT_F",		5, //Asst AT, default 15
+		"B_T_soldier_AAA_F",		5, //Asst AA, default 15
 		"B_Sharpshooter_F",		15, //762x51, default 15
 		"B_HeavyGunner_F",		15, //338, default 15
-		"B_soldier_exp_F",		5, //APERS, default 10
-		"B_officer_F",			5, //officer, default 10
-		"B_spotter_F",			5, //spotter, default 10
-		"B_sniper_F",			5 //sniper, default 10
+		"B_T_soldier_exp_F",		5, //APERS, default 10
+		"B_T_officer_F",			5, //officer, default 10
+		"B_T_spotter_F",			5, //spotter, default 10
+		"B_T_Sniper_F",			5 //sniper, default 10
 	],
 	[
-		"O_Soldier_F",			5, //rifleman, default 100
-		"O_Soldier_GL_F",		70, //Grenadir, default 80
-		"O_Soldier_AR_F",		40, //Autorifleman, default 70
-		"O_Soldier_AAR_F",		15, //Asst Autorifleman, default 70
-		"O_Soldier_TL_F",		5, //Team leader. default 30
-		"O_officer_F",			5, //officer, default 10
-		"O_soldier_M_F",		30, //Marksman, default 20
-		"O_Soldier_LAT_F",		50, //RPG32, default 20
-		"O_Soldier_A_F",		5, //Ammo, default 20
-		"O_Soldier_SL_F",		15, //Squad leader, default 15
-		"O_Soldier_AAT_F",		5, //Asst AT, default 15
-		"O_Soldier_AAA_F",		5, //Asst AA, default 15
+		"O_T_Soldier_F",			5, //rifleman, default 100
+		"O_T_soldier_GL_F",		70, //Grenadir, default 80
+		"O_T_soldier_AR_F",		40, //Autorifleman, default 70
+		"O_T_soldier_AAR_F",		15, //Asst Autorifleman, default 70
+		"O_T_soldier_TL_F",		5, //Team leader. default 30
+		"O_T_officer_F",			5, //officer, default 10
+		"O_T_soldier_M_F",		30, //Marksman, default 20
+		"O_T_soldier_LAT_F",		50, //RPG32, default 20
+		"O_T_soldier_A_F",		5, //Ammo, default 20
+		"O_T_soldier_SL_F",		15, //Squad leader, default 15
+		"O_T_soldier_AAT_F",		5, //Asst AT, default 15
+		"O_T_soldier_AAA_F",		5, //Asst AA, default 15
 		"O_Sharpshooter_F",		15, //93x64, default 15
 		"O_HeavyGunner_F",		15, //93x64, default 15
-		"O_Soldier_AT_F",		25, //Titan AT, default 15
-		"O_Soldier_AA_F",		25, //Titan AA, default 15
-		"O_engineer_F",			5, //engineer, default 15
-		"O_medic_F",			15, //Medic, default 15
-		"O_soldier_repair_F",	5, //Repair, default 15
-		"O_soldier_exp_F",		5, //APERS, default 10
-		"O_spotter_F",			5, //spotter, default 10
-		"O_sniper_F",			5 //sniper, default 10
+		"O_T_soldier_AT_F",		25, //Titan AT, default 15
+		"O_T_soldier_AA_F",		25, //Titan AA, default 15
+		"O_T_engineer_F",			5, //engineer, default 15
+		"O_T_medic_F",			15, //Medic, default 15
+		"O_T_soldier_repair_F",	5, //Repair, default 15
+		"O_T_soldier_exp_F",		5, //APERS, default 10
+		"O_T_spotter_F",			5, //spotter, default 10
+		"O_T_sniper_F",			5 //sniper, default 10
 	],
 	[
 		"I_soldier_F",			15, //rifleman, default 100
