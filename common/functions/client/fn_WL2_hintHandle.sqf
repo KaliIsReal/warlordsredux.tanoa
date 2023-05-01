@@ -10,7 +10,7 @@ switch (_event) do {
 			if (isNil _varName) then {
 				missionNamespace setVariable [_varName, false]
 			};
-		} forEach ["assembly", "maintenance", "targetResetVoting", "report", "nearSL"];
+		} forEach ["assembly", "maintenance", "targetResetVoting", "report"];
 		
 		_hintText = "";
 		_lastHint = "";
@@ -48,7 +48,7 @@ switch (_event) do {
 			};
 
 			if (BIS_WL_showHint_report) then {
-				_hintText = _hintText + format [
+				_hintText = format [
 				"<t size = '1' shadow = '0'><t valign = 'top'> %1 </t><br/><t align = 'left' >%2: </t><t align = 'right' color = '#4bff58'>%3</t><br/><t align = 'left'>%4: </t><t align = 'right' color = '#ff4b4b'> %5 </t></t>",
 				format ["You where killed by: %1. You can choose to report him or forgive him.", (name _killer)],
 				localize "STR_dik_space",
@@ -77,9 +77,6 @@ switch (_event) do {
 				while {!BIS_WL_missionEnd} do {
 					missionNamespace setVariable [_varName, call _show];
 					if (_varName == "BIS_WL_showHint_maintenance") then {
-						[false] call BIS_fnc_WL2_refreshOSD;
-					};
-					if (_varName == "BIS_WL_showHint_nearSL") then {
 						[false] call BIS_fnc_WL2_refreshOSD;
 					};
 					sleep WL_TIMEOUT_STANDARD;

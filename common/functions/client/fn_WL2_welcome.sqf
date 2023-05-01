@@ -1,6 +1,7 @@
 ["RequestMenu_close"] call BIS_fnc_WL2_setupUI;
 
 createDialog ["welcomeScreen", true];
+hRead = false;
 
 (findDisplay 6969) displayAddEventhandler ["KeyDown",{
 	if (dialog) then {
@@ -16,7 +17,8 @@ createDialog ["welcomeScreen", true];
 
 0 spawn {
 	while {dialog} do {
-		_time = serverTime + 7;
+		waitUntil {sleep 0.1; hRead == true};
+		_time = serverTime + 5;
 		waitUntil {sleep 0.1; serverTime > _time};
 		ctrlEnable [1, true];
 	};
@@ -60,6 +62,13 @@ while {dialog} do {
 	_index = lbCurSel 69695;
 	_curSel = lbData [69695, _index];
 
+	if (hRead == false) then {
+		ctrlShow [6969691, true];
+		ctrlSetText [6969691, localize "STR_MRTM_welcomeInteract_21"];
+	} else {
+		ctrlShow [6969691, false];
+	};
+
 	lbSetText[69695, _pageAbt, localize "STR_MRTM_welcomeInteract_01"];
 	lbSetText[69695, _pageHow, localize "STR_MRTM_welcomeInteract_02"];
 	lbSetText[69695, _theTeam, localize "STR_MRTM_welcomeInteract_03"];
@@ -68,7 +77,6 @@ while {dialog} do {
 	lbSetText[69695, _scripts, localize "STR_MRTM_welcomeInteract_06"];
 
 	_inventoryKey = actionKeysNames "gear";
-	_groupKey = actionKeysNames "teamSwitch";
 	_gearKey = actionKeysNames "cycleThrownItems";
 
 	switch (_curSel) do {
@@ -89,6 +97,7 @@ while {dialog} do {
 
 		case "pageHow": {
 			ctrlSetText [69694, "img\wl.paa"];
+			hRead = true;
 
 			private _control = findDisplay 6969 displayCtrl 69696;
 			_control ctrlSetStructuredText composeText [
@@ -100,7 +109,6 @@ while {dialog} do {
 			"", lineBreak,
 			localize "STR_MRTM_welcomeInteract_11", lineBreak,
 			format [localize "STR_MRTM_welcomeInteract_12", _inventoryKey], lineBreak,
-			format [localize "STR_MRTM_welcomeInteract_22", _groupKey], lineBreak,
 			localize "STR_MRTM_welcomeInteract_13", lineBreak,
 			format [localize "STR_MRTM_welcomeInteract_14", _gearKey], lineBreak,
 			""
@@ -156,7 +164,6 @@ while {dialog} do {
 			_control ctrlSetStructuredText composeText [
 			"2.5.3", lineBreak,
 			"-New CP system. (Should be more secure against cheaters)", lineBreak,
-			"-Added the dynamic group system.", lineBreak,
 			"-New improved map icons.", lineBreak,
 			"-Gorgon has new camo.", lineBreak,
 			"-Performance updates. (both client and server)", lineBreak,
