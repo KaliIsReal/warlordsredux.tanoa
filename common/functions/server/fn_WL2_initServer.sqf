@@ -133,7 +133,6 @@ BIS_WL_wrongTeamGroup deleteGroupWhenEmpty FALSE;
 
 if !(isDedicated) then {waitUntil {!isNull player && isPlayer player}};
 
-call BIS_fnc_WL2_loadFactionClasses;
 call BIS_fnc_WL2_sectorsInitServer;
 "setup" call BIS_fnc_WL2_handleRespawnMarkers;
 {_x call BIS_fnc_WL2_parsePurchaseList} forEach BIS_WL_competingSides;

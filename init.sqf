@@ -27,7 +27,7 @@ addMissionEventHandler ["Loaded", {
 }];
 [] execVM "common\scripts\GF_Earplugs\GF_Earplugs.sqf";
 
-[] execVM "fn_WL2_loadFactionsClasses.sqf";
+[] execVM "fn_WL2_loadFactionClasses.sqf";
 
 //Vehicle unflip 
 if ( hasInterface ) then
