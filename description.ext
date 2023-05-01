@@ -1,8 +1,8 @@
-#include "Functions\warlords_constants.inc"
-#include "scripts\taw_vd\GUI.h"
+#include "common\functions\warlords_constants.inc"
+#include "common\scripts\taw_vd\GUI.h"
 
-#include "ui\defines.hpp"
-#include "ui\controls.hpp"
+#include "common\ui\defines.hpp"
+#include "common\ui\controls.hpp"
 
 
 onLoadName = "Warlords Redux 2.5"; 
@@ -35,7 +35,7 @@ ReviveBleedOutDelay = 180;              //unconscious state duration (in secs)
 //earplug script stuff
 class RscTitles
 {
-	#include "scripts\GF_Earplugs\GF_Earplugs_HPP.hpp"	
+	#include "common\scripts\GF_Earplugs\GF_Earplugs_HPP.hpp"	
 };
 //end of earplug script info
 
@@ -47,7 +47,7 @@ class CfgFunctions {
 	{
     	class Client 
 		{
-    		file = "Functions\client";
+    		file = "common\functions\client";
 			class WL2_cpBalance {};
     		class WL2_announcer {};
 			class WL2_assetMapControl {};
@@ -108,7 +108,7 @@ class CfgFunctions {
     	};
 		class Server 
 		{
-    		file = "Functions\server";
+    		file = "common\functions\server";
     		class WL2_assetRelevanceCheck {};
 			class WL2_detectNewPlayers {};
 			class WL2_friendlyFireHandleServer {};
@@ -131,7 +131,7 @@ class CfgFunctions {
 			class WL2_dataBase {};
     	};
     	class Common {
-    		file = "Functions\common";
+    		file = "common\functions\common";
     		class WL2_findSpawnPositions {};
 			class WL2_fundsControl {};
 			class WL2_generateVariableName {};
@@ -154,7 +154,7 @@ class CfgFunctions {
     	};
 		class Subroutines 
 		{
-    		file = "Functions\subroutines";
+    		file = "common\functions\subroutines";
     		class WL2_sub_arsenalSetup {};
 			class WL2_sub_assetAssemblyHandle {};
 			class WL2_sub_deleteAsset {};
@@ -171,14 +171,14 @@ class CfgFunctions {
 	};
 
 /*******************************START OF CUSTOM CONTENT HERE****************************/
-	#include "scripts\GOM\functions\GOM_fnc_functions.hpp" //GOM_fnc_aircraftLoadout V1.35 made by Grumpy Old Man 17-5-2017
-	#include "scripts\taw_vd\CfgFunctions.hpp" //Distance MOD
+	#include "common\scripts\GOM\functions\GOM_fnc_functions.hpp" //GOM_fnc_aircraftLoadout V1.35 made by Grumpy Old Man 17-5-2017
+	#include "common\scripts\taw_vd\CfgFunctions.hpp" //Distance MOD
 	//Unflip Mod
 	class KS
 	{	
 		class normalFunctions
 		{
-			file = "scripts\VUnflip\functions";	// Folder where all functions are.
+			file = "common\scripts\VUnflip\functions";	// Folder where all functions are.
 			class unflipVehicle {};
 		};
 	};		
@@ -187,7 +187,7 @@ class CfgFunctions {
 	{
 		class spawnThese //Seriously "spawn" these, do not "call" them!
 		{
-			file = "scripts\VUnflip\functions\loops";
+			file = "common\scripts\VUnflip\functions\loops";
 			class unflipVehicleAddAction {};
 		};
 		
@@ -196,7 +196,7 @@ class CfgFunctions {
 	{
 		class MISC
 		{
-			file = "scripts\DAPS\Scripts\Misc";
+			file = "common\scripts\DAPS\Scripts\Misc";
 			class MisguideMissile {};
 		};
 	};
@@ -205,7 +205,7 @@ class CfgFunctions {
 	{
 		class APS 
 		{
-			file = "scripts\DAPS\Scripts\APS";
+			file = "common\scripts\DAPS\Scripts\APS";
 			class Afganit {};
 			class Afganit2 {};
 			class AMAP {};
@@ -238,7 +238,7 @@ class CfgFunctions {
 		};
 		class DIRCM
 		{
-			file = "scripts\DAPS\Scripts\DIRCM";
+			file = "common\scripts\DAPS\Scripts\DIRCM";
 			class MisguideSAM {};
 			class Nemesis {};
 			class Nemesis2 {};
@@ -248,7 +248,7 @@ class CfgFunctions {
 		};
 		class Management
 		{
-			file = "scripts\DAPS\Scripts\Management";
+			file = "common\scripts\DAPS\Scripts\Management";
 			class AssignAPS {};
 			class BroadcastTypes {};
 			class CustomAmmo {};
@@ -263,7 +263,7 @@ class CfgFunctions {
 		};
 		class Misc
 		{
-			file = "scripts\DAPS\Scripts\Misc";
+			file = "common\scripts\DAPS\Scripts\Misc";
 			class Active {};
 			class Blast {};
 			class CanSmoke {};
@@ -291,7 +291,7 @@ class CfgFunctions {
 		}:
 		class Report
 		{
-			file = "scripts\DAPS\Scripts\Report";
+			file = "common\scripts\DAPS\Scripts\Report";
 			class DetailedReport {};
 			class Indicator {};
 			class Report {};
@@ -325,12 +325,12 @@ class CfgRemoteExec
 class CfgCommunicationMenu
 {
 
-	#include "scripts\GOM\functions\GOM_fnc_aircraftLoadoutMenu.hpp"
+	#include "common\scripts\GOM\functions\GOM_fnc_aircraftLoadoutMenu.hpp"
 
 };
 
-#include "scripts\GOM\dialogs\GOM_dialog_parents.hpp"
-#include "scripts\GOM\dialogs\GOM_dialog_controls.hpp"
+#include "common\scripts\GOM\dialogs\GOM_dialog_parents.hpp"
+#include "common\scripts\GOM\dialogs\GOM_dialog_controls.hpp"
 
 /*******************************END OF CUSTOM CONTENT HERE****************************/
 
