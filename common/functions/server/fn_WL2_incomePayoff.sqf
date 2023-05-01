@@ -10,9 +10,9 @@ _refreshBalance = {
 
 	{
 		_incomeStandard = _x call BIS_fnc_WL2_income;
-		_actualIncome = round (_incomeStandard * (if (_x == west) then [{missionNamespace getVariable "blanceMultilplierBlu"}, {missionNamespace getVariable "blanceMultilplierOpf"}]));
+		_actualIncome = round (_incomeStandard * (if (_x == west) then [{(missionNamespace getVariable "blanceMultilplierBlu")}, {(missionNamespace getVariable "blanceMultilplierOpf")}]));
 		if (_x == west) then [{missionNamespace setVariable ["actualIncomeBlu", _actualIncome, true]}, {missionNamespace setVariable ["actualIncomeOpf", _actualIncome, true]}]
-	} forEach BIS_WL_competingSides; // we calculate the actual income for each faction and store it in the income hashmap. That allows us to keep the loop for all players trivial.
+	} forEach BIS_WL_competingSides;
 };
 
 while {true} do {
@@ -28,26 +28,22 @@ while {true} do {
 
 	{
 		_side = side group _x;
-		/*
-		if (_side == west) then [
-			{[_x, (missionNamespace getVariable "actualIncomeBlu")] call BIS_fnc_WL2_fundsControl}, 
-			{[_x, (missionNamespace getVariable "actualIncomeOpf")] call BIS_fnc_WL2_fundsControl}
-		];
-		*/
+
+		private _uid = getPlayerUID _x;
 		if (_side == west) then {
 			if ((missionNamespace getVariable "actualIncomeBlu") < 50) then {
 				_incomeStandard = west call BIS_fnc_WL2_income;
-				[_x, 50] call BIS_fnc_WL2_fundsControl;
+				[_uid, 50] spawn BIS_fnc_WL2_fundsDatabaseWrite;
 			} else {
-				[_x, (missionNamespace getVariable "actualIncomeBlu")] call BIS_fnc_WL2_fundsControl;
+				[_uid, (missionNamespace getVariable "actualIncomeBlu")] spawn BIS_fnc_WL2_fundsDatabaseWrite;
 			};
 		} else {
 			if ((missionNamespace getVariable "actualIncomeOpf") < 50) then {
 				_incomeStandard = east call BIS_fnc_WL2_income;
-				[_x, 50] call BIS_fnc_WL2_fundsControl;
+				[_uid, 50] spawn BIS_fnc_WL2_fundsDatabaseWrite;
 			} else {
-				[_x, (missionNamespace getVariable "actualIncomeOpf")] call BIS_fnc_WL2_fundsControl;
+				[_uid, (missionNamespace getVariable "actualIncomeOpf")] spawn BIS_fnc_WL2_fundsDatabaseWrite;
 			};
 		};
-	} forEach allPlayers; // The allPlayers Loop simply fetches the player's side, uses the side to get the appropriate value from the hashmap and applies it.
+	} forEach BIS_WL_allWarlords; // The allPlayers Loop simply fetches the player's side, uses the side to get the appropriate value from the hashmap and applies it.
 };

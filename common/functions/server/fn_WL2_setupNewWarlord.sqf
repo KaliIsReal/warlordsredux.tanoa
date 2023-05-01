@@ -9,7 +9,15 @@ private _varFormat = "";
 
 _warlord setVariable ["BIS_WL_detectedByServerSince", WL_SYNCED_TIME];
 _warlord setVariable ["BIS_WL_friendlyKillTimestamps", []];
-[_warlord, if (WL_SYNCED_TIME < (BIS_WL_missionStart + 30)) then {BIS_WL_startCP} else {BIS_WL_startCP min BIS_WL_startCP}] call BIS_fnc_WL2_fundsControl; //Mission start CP is controlled here
+serverNamespace setVariable [format ["BIS_WL_isTransferring_%1", getPlayerUID _warlord], false];
+
+//CP database
+private _uid = getPlayerUID _warlord;
+private _fundsDB = (serverNamespace getVariable "fundsDatabase");
+private _pFunds = ((serverNamespace getVariable "fundsDatabase") getOrDefault [_uid, 1000]);
+_fundsDB set [_uid, _pFunds];
+[(serverNamespace getVariable "fundsDatabase"), _uid] spawn BIS_fnc_WL2_fundsDatabaseUpdate;
+
 
 _boundToAnotherTeam = FALSE;
 
@@ -24,18 +32,6 @@ if (isPlayer _warlord) then {
 		(missionNamespace getVariable format ["BIS_WL_boundTo%1", side group _warlord]) pushBackUnique getPlayerUID _warlord;
 		_playerSideArr = BIS_WL_playerIDArr # (BIS_WL_competingSides find side group _warlord);
 		_playerSideArr pushBackUnique getPlayerUID _warlord;
-		_var = format ["BIS_WL_%1", getPlayerUID _warlord];
-				
-		if (isMultiplayer) then {
-			_var addPublicVariableEventHandler BIS_fnc_WL2_processClientRequest;
-		} else {
-			missionNamespace setVariable [_var, ""];
-			_var spawn {
-				waitUntil {(missionNamespace getVariable _this) != ""};
-				[_this, missionNamespace getVariable _this] call BIS_fnc_WL2_processClientRequest;
-				waitUntil {(missionNamespace getVariable _this) == ""};
-			};
-		};
 		
 		_varFormat = format ["BIS_WL_%1_repositionDone", getPlayerUID _warlord];
 		waitUntil {!(missionNamespace getVariable [_varFormat, TRUE])};

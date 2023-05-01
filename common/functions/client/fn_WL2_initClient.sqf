@@ -13,7 +13,7 @@ if (RD_DISABLE_TEAM_SWITCHING == 1) then{
 	private _teamCheckOKVarID = format ["BIS_WL_teamCheckOK_%1", getPlayerUID player];
 
 	waitUntil {!isNil {missionNamespace getVariable _teamCheckOKVarID}};
-
+	
 	if !(missionNamespace getVariable _teamCheckOKVarID) exitWith {
 		addMissionEventHandler ["EachFrame", {
 			clearRadio;
@@ -56,7 +56,7 @@ if (RD_DISABLE_TEAM_SWITCHING == 1) then{
 	};
 };
 
-[] spawn {
+0 spawn {
 	_varFormat = format ["BIS_WL_%1_repositionDone", getPlayerUID player];
 	missionNamespace setVariable [_varFormat, FALSE];
 	publicVariableServer _varFormat;
@@ -77,6 +77,8 @@ if (RD_DISABLE_TEAM_SWITCHING == 1) then{
 	missionNamespace setVariable [_varFormat, TRUE];
 	publicVariableServer _varFormat;
 };
+
+
 
 if !((side group player) in BIS_WL_competingSides) exitWith {
 	["client_init"] call BIS_fnc_endLoadingScreen;
@@ -106,11 +108,11 @@ if !(isServer) then {
 	BIS_WL_playerSide call BIS_fnc_WL2_parsePurchaseList;
 };
 
-[] spawn BIS_fnc_WL2_zoneRestrictionHandleClient;
-[] spawn BIS_fnc_WL2_sectorCaptureStatus;
-[] spawn BIS_fnc_WL2_teammatesAvailability;
-[] spawn BIS_fnc_WL2_forceGroupIconsFunctionality;
-[] spawn BIS_fnc_WL2_mapControlHandle;
+0 spawn BIS_fnc_WL2_zoneRestrictionHandleClient;
+0 spawn BIS_fnc_WL2_sectorCaptureStatus;
+0 spawn BIS_fnc_WL2_teammatesAvailability;
+0 spawn BIS_fnc_WL2_forceGroupIconsFunctionality;
+0 spawn BIS_fnc_WL2_mapControlHandle;
 
 BIS_WL_groupIconClickHandler = addMissionEventHandler ["GroupIconClick", BIS_fnc_WL2_groupIconClickHandle];
 BIS_WL_groupIconEnterHandler = addMissionEventHandler ["GroupIconOverEnter", BIS_fnc_WL2_groupIconEnterHandle];
@@ -150,13 +152,64 @@ BIS_WL_enemiesCheckTrigger setTriggerActivation ["ANYPLAYER", "PRESENT", TRUE];
 BIS_WL_enemiesCheckTrigger setTriggerStatements ["{(side group _x) getFriend BIS_WL_playerSide == 0} count thislist > 0", "", ""];
 
 player addEventHandler ["GetInMan", {
+	params ["_unit", "_role", "_vehicle", "_turret"];
 	detach BIS_WL_enemiesCheckTrigger; 
-	BIS_WL_enemiesCheckTrigger attachTo [vehicle player, [0, 0, 0]]
+	BIS_WL_enemiesCheckTrigger attachTo [vehicle player, [0, 0, 0]];
+	if (typeOf _vehicle == "B_Plane_Fighter_01_F" || typeOf _vehicle == "B_Plane_CAS_01_dynamicLoadout_F") then  {
+		0 spawn BIS_fnc_WL2_betty;
+	};
 }];
+
+if (([0] call BIS_fnc_countdown) < (33000)) then {
+	player addAction [
+		"Get 10K CP",
+		{
+			_uid = getPlayerUID player;
+			[_uid, 10000] remoteExec ["BIS_fnc_WL2_fundsDatabaseWrite", 2];
+		}
+	];
+};
 
 player addEventHandler ["GetOutMan", {
 	detach BIS_WL_enemiesCheckTrigger; 
-	BIS_WL_enemiesCheckTrigger attachTo [player, [0, 0, 0]]
+	BIS_WL_enemiesCheckTrigger attachTo [player, [0, 0, 0]];
+	if (_vehicle isKindOf "Air" && getPosATL player # 2 > 100) then {
+		0 spawn {
+			sleep 1;
+			playerFreeFalling = getUnitFreefallInfo player;
+			if (playerFreeFalling # 0) then {
+				private _backpack = unitBackpack player; 
+				private _oldbackpack = typeOf unitBackpack player;
+				private _oldbackpackItems = backpackItems player;
+
+				if (!(isNull _backpack)) then {
+					removeBackpack player;
+					player addBackpack "B_Parachute";
+				} else {
+					player addBackpack "B_Parachute";
+				};
+
+				waitUntil {sleep 1; (getPosATL player # 2) <= 50 || (not (alive player))};
+				player action ["OpenParachute", player];
+				waitUntil {sleep 1; isNull objectParent player};
+				player addBackpack _oldbackpack;
+				{player addItemToBackpack _x;} forEach oldbackpackItems;
+			};
+		};
+	};
+}];
+
+player addEventHandler ["InventoryOpened",{
+	params ["_unit","_container"];
+	_override = false;
+	_allUnitBackpackContainers = (player nearEntities ["Man", 50]) select {isPlayer _x && _x getVariable "arsenalOpened"} apply {backpackContainer _x};
+
+	if (_container in _allUnitBackpackContainers) then {
+		systemchat "Access denied!";
+		_override = true;
+	};
+
+	_override;
 }];
 
 player addEventHandler ["Killed", {
@@ -202,7 +255,7 @@ if (BIS_WL_arsenalEnabled) then {
 	call BIS_fnc_WL2_sub_arsenalSetup;
 };
 
-[] spawn {
+0 spawn {
 	waitUntil {uiSleep WL_TIMEOUT_SHORT; !isNull WL_CONTROL_MAP};
 	WL_CONTROL_MAP ctrlMapAnimAdd [0, 0.35, BIS_WL_playerBase];
 	ctrlMapAnimCommit WL_CONTROL_MAP;
@@ -218,20 +271,17 @@ call BIS_fnc_WL2_refreshCurrentTargetData;
 call BIS_fnc_WL2_sceneDrawHandle;
 call BIS_fnc_WL2_targetResetHandle;
 player call BIS_fnc_WL2_sub_assetAssemblyHandle;
-"init" spawn BIS_fnc_WL2_hintHandle;
-[] spawn BIS_fnc_WL2_music;
-[] spawn BIS_fnc_WL2_welcome;
+[player, "init"] spawn BIS_fnc_WL2_hintHandle;
+0 spawn BIS_fnc_WL2_welcome;
 
 (format ["BIS_WL_%1_friendlyKillPenaltyEnd", getPlayerUID player]) addPublicVariableEventHandler BIS_fnc_WL2_friendlyFireHandleClient;
 
-waitUntil {WL_PLAYER_FUNDS != -1};
-
 ["OSD"] spawn BIS_fnc_WL2_setupUI;
-[] spawn BIS_fnc_WL2_timer;
-[] spawn BIS_fnc_WL2_cpBalance;
+0 spawn BIS_fnc_WL2_timer;
+0 spawn BIS_fnc_WL2_cpBalance;
 
 
-[] spawn {
+0 spawn {
 	waitUntil {sleep 1; isNull WL_TARGET_FRIENDLY};
 	_t = WL_SYNCED_TIME + 10;
 	waitUntil {sleep WL_TIMEOUT_SHORT; WL_SYNCED_TIME > _t || visibleMap};
@@ -241,7 +291,7 @@ waitUntil {WL_PLAYER_FUNDS != -1};
 	};
 };
 
-[] spawn {
+0 spawn {
 	_t = WL_SYNCED_TIME + 10;
 	waitUntil {sleep WL_TIMEOUT_STANDARD; WL_SYNCED_TIME > _t && !isNull WL_TARGET_FRIENDLY};
 	sleep 5;
@@ -255,76 +305,47 @@ sleep 0.1;
 
 "Initialized" call BIS_fnc_WL2_announcer;
 [toUpper localize "STR_A3_WL_popup_init"] spawn BIS_fnc_WL2_smoothText;
-["maintenance", {(player nearObjects ["All", WL_MAINTENANCE_RADIUS]) findIf {(_x getVariable ["BIS_WL_canRepair", FALSE]) || (_x getVariable ["BIS_WL_canRearm", FALSE])} != -1}] call BIS_fnc_WL2_hintHandle;
+[player, "maintenance", {(player nearObjects ["All", WL_MAINTENANCE_RADIUS]) findIf {(_x getVariable ["BIS_WL_canRepair", FALSE]) || (_x getVariable ["BIS_WL_canRearm", FALSE])} != -1}] call BIS_fnc_WL2_hintHandle;
+[player, "nearSL", {(player distance2D (leader group player) <= 100) && (player != (leader group player))}] call BIS_fnc_WL2_hintHandle;
 
 sleep 0.1;
 
-[] spawn BIS_fnc_WL2_selectedTargetsHandle;
-[] spawn BIS_fnc_WL2_targetSelectionHandleClient;
-[] spawn BIS_fnc_WL2_purchaseMenuOpeningHandle;
-[] spawn BIS_fnc_WL2_assetMapControl;
-
-//CP Saving system
-private _uid = getPlayerUID player;
-private _id = clientOwner;
-[_uid, 0, _id, "recieve"] remoteExecCall ["BIS_fnc_WL2_dataBase", 2];
-
-sleep 1;
-[] spawn BIS_fnc_WL2_clientFundsUpdateLoop;
-
-
-waituntil {!isnull (findDisplay 12)};
-
-if (side player == west) then {
-	((findDisplay 12) displayCtrl 51) ctrlAddEventHandler ["Draw", {
+0 spawn BIS_fnc_WL2_selectedTargetsHandle;
+0 spawn BIS_fnc_WL2_targetSelectionHandleClient;
+0 spawn BIS_fnc_WL2_purchaseMenuOpeningHandle;
+0 spawn BIS_fnc_WL2_assetMapControl;
+0 spawn BIS_fnc_WL2_getUavConnected;
+0 spawn BIS_fnc_WL2_mapIcons;
+0 spawn {
+	while {!BIS_WL_missionEnd} do {
+		waitUntil {!isNull (group player)};
 		{
-		private _truck = _x;
-		(_this select 0) drawIcon [
-			getText (configFile/"CfgVehicles"/typeOf _truck/"Icon"),
-			[0,0.3,0.6,1],
-			ASLToAGL getPosASL _truck,
-			15,
-			15,
-			direction _truck,
-			"Fast travel vehicle",
-			1,
-			WL_MAP_FONT_SIZE,
-			"RobotoCondensed",
-			"right"
-		]; 
-		} forEach entities "B_Truck_01_medical_F";
-	}];
-} else {
-	((findDisplay 12) displayCtrl 51) ctrlAddEventHandler ["Draw", {
-		{
-		private _truck = _x;
-		(_this select 0) drawIcon [
-			getText (configFile/"CfgVehicles"/typeOf _truck/"Icon"),
-			[0.5,0,0,1],
-			ASLToAGL getPosASL _truck,
-			15,
-			15,
-			direction _truck,
-			"Fast travel vehicle",
-			1,
-			WL_MAP_FONT_SIZE,
-			"RobotoCondensed",
-			"right"
-		]; 
-		} forEach entities "O_Truck_03_medical_F";
-	}];
+			[_x] joinSilent (group player);
+			_x setVariable ["BIS_WL_ownerAsset", (getPlayerUID player)];
+		} forEach (allUnits select {(_x getVariable "BIS_WL_Owned_By" == getPlayerUID player) && !(_x in (units (group player)))});
+		sleep 0.5;
+	};
 };
+["InitializePlayer", [player]] call BIS_fnc_dynamicGroups;
 
-player addAction [
-	"Commemorate",
-	{
-		[toUpper "R.I.P. Spacelukkie"] spawn BIS_fnc_WL2_smoothText;
-	},
-	nil,
-	92,
-	true,
-	false,
-	"",
-	"player distance [17366.7,12577.5,0.00148773] < 7",
-	5
-];
+player setVariable ["arsenalOpened", false, true];
+
+waituntil {sleep 0.1; !isnull (findDisplay 46)};
+(findDisplay 46) displayAddEventHandler ["KeyDown", {
+	_key = actionKeysNames "curatorInterface";
+	_keyName = (keyName (_this select 1));
+	if (_keyName == _key) then {
+		if !((getPlayerUID player) == "76561198034106257"|| (getPlayerUID player) == "76561198865298977") then {
+			true;
+		};
+	};
+}];
+
+0 spawn {
+	while {true} do {
+		if (!isNull (findDisplay 60490) && (!alive player)) then {
+			(findDisplay 60490) closeDisplay 1;
+		};
+		sleep 0.5;
+	};
+};

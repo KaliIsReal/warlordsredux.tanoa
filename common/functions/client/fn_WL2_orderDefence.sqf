@@ -2,8 +2,6 @@
 
 params ["_class", "_cost", "_offset"];
 
-//[player, -_cost] call BIS_fnc_WL2_fundsControl;
-
 if (count _offset != 3) then {
 	_offset = [0, 1.5, 0];
 };
@@ -11,20 +9,18 @@ if (count _offset != 3) then {
 BIS_WL_currentSelection = WL_ID_SELECTION_DEPLOYING_DEFENCE;
 
 if (visibleMap) then {
-	openMap [FALSE, FALSE];
+	openMap [false, false];
 	titleCut ["", "BLACK IN", 0.5];
 };
 
-_asset = ["requestAsset", [_class, player modelToWorld _offset, TRUE, TRUE]] call BIS_fnc_WL2_sendClientRequest;
-
-_ownedVehiclesVarID = format ["BIS_WL_%1_ownedVehicles", getPlayerUID player];
-missionNamespace setVariable [_ownedVehiclesVarID, WL_PLAYER_VEHS + [_asset]];
-publicVariableServer _ownedVehiclesVarID;
-
-_asset lock TRUE;
-_asset enableWeaponDisassembly FALSE;
+_asset = createVehicle [_class, player modelToWorld _offset, [], 0, "CAN_COLLIDE"];
+_asset setDir direction player;
+_asset enableSimulationGlobal false;
+_asset hideObjectGlobal true;
+_asset lock true;
+_asset enableWeaponDisassembly false;
 _asset disableCollisionWith player;
-_asset hideObject FALSE;
+_asset hideObject false;
 
 player reveal [_asset, 4];
 _asset attachTo [player, _offset];
@@ -33,10 +29,10 @@ detach _asset;
 _offset_tweaked = [_offset select 0, _offset select 1, (_offset select 2) - _h];
 _asset attachTo [player, _offset_tweaked];
 
-"assembly" call BIS_fnc_WL2_hintHandle;
+[player, "assembly"] call BIS_fnc_WL2_hintHandle;
 
-BIS_WL_spacePressed = FALSE;
-BIS_WL_backspacePressed = FALSE;
+BIS_WL_spacePressed = false;
+BIS_WL_backspacePressed = false;
 
 _deployKeyHandle = WL_DISPLAY_MAIN displayAddEventHandler ["KeyDown", {
 	if (_this # 1 == 57) then {
@@ -53,7 +49,7 @@ _deployKeyHandle = WL_DISPLAY_MAIN displayAddEventHandler ["KeyDown", {
 
 uiNamespace setVariable ["BIS_WL_deployKeyHandle", _deployKeyHandle];
 
-[] spawn {
+0 spawn {
 	waitUntil {
 		sleep WL_TIMEOUT_STANDARD;
 		BIS_WL_spacePressed ||
@@ -62,6 +58,7 @@ uiNamespace setVariable ["BIS_WL_deployKeyHandle", _deployKeyHandle];
 		!alive player ||
 		lifeState player == "INCAPACITATED" ||
 		triggerActivated BIS_WL_enemiesCheckTrigger ||
+		(getPosATL player) select 2 > 1 ||
 		(BIS_WL_sectorsArray # 0) findIf {player inArea (_x getVariable "objectAreaComplete")} == -1
 	};
 	if !(BIS_WL_spacePressed) then {
@@ -75,24 +72,14 @@ WL_DISPLAY_MAIN displayRemoveEventHandler ["KeyDown", uiNamespace getVariable "B
 uiNamespace setVariable ['BIS_WL_deployKeyHandle', nil];
 _offset set [1, _asset distance player];
 detach _asset;
-missionNamespace setVariable [_ownedVehiclesVarID, WL_PLAYER_VEHS - [_asset]];
-publicVariable _ownedVehiclesVarID;
-_asset call BIS_fnc_WL2_sub_deleteAsset;
+deleteVehicle _asset;
 
-["assembly", FALSE] call BIS_fnc_WL2_hintHandle;
+[player, "assembly", false] call BIS_fnc_WL2_hintHandle;
 
 if (BIS_WL_spacePressed) then {
 	playSound "assemble_target";
-	waitUntil {isNull _asset};
-	_asset = ["requestAsset", [_class, player modelToWorld _offset, TRUE]] call BIS_fnc_WL2_sendClientRequest;
-	[player, _asset] call BIS_fnc_WL2_newAssetHandle;
-	_asset enableWeaponDisassembly FALSE;
-	_asset setDir direction player;
-	player reveal [_asset, 4];
+	[player, "orderAsset", _cost, (player modelToWorld _offset), _class, true] remoteExec ["BIS_fnc_WL2_handleClientRequest", 2];
 } else {
-	[player, _cost] call BIS_fnc_WL2_fundsControl;
-	private  _id = clientOwner;
-	[] remoteExec ["BIS_fnc_WL2_clientFundsUpdate",  _id];
 	"Canceled" call BIS_fnc_WL2_announcer;
 	[toUpper localize "STR_A3_WL_deploy_canceled"] spawn BIS_fnc_WL2_smoothText;
 };

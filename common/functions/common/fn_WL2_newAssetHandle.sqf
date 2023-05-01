@@ -13,13 +13,14 @@ if (isNull _owner && isServer) then {
 };
 
 if (isPlayer _owner) then {
-	_asset setVariable ["BIS_WL_ownerGrp", group _owner];
+	_asset setVariable ["BIS_WL_ownerAsset", (getPlayerUID _owner)];
 	_asset setVariable ["BIS_WL_iconText", getText (configFile >> "CfgVehicles" >> typeOf _asset >> "displayName")];
+	_asset spawn DAPS_fnc_RegisterVehicle;
 	
 	_friendlyFireProtection = _asset addEventHandler ["HandleDamage", {
 		params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint"];
-		_ownerGrp = _unit getVariable ["BIS_WL_ownerGrp", objNull];
-		if (group _instigator != _ownerGrp && side group _instigator == side _ownerGrp) then {0};
+		_ownerGrp = _unit getVariable ["BIS_WL_ownerAsset", objNull];
+		if ((getPlayerUID _instigator)!= _ownerGrp && side group _instigator == side group (_ownerGrp call BIS_fnc_getUnitByUID)) then {0};
 	}];
 	
 	[_asset, _friendlyFireProtection] spawn {
@@ -133,7 +134,7 @@ if (isPlayer _owner) then {
 							{
 								params ["_asset"];
 								if ((_asset getVariable "BIS_WL_nextRepair") <= WL_SYNCED_TIME) then {
-									["repairAsset", [_asset]] call BIS_fnc_WL2_sendClientRequest;
+									_asset setDamage 0;
 									_asset setVariable ["BIS_WL_nextRepair", WL_SYNCED_TIME + WL_MAINTENANCE_COOLDOWN_REPAIR];
 									playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, FALSE, getPosASL _asset, 2, 1, 75];
 									[toUpper localize "STR_A3_WL_popup_asset_repaired"] spawn BIS_fnc_WL2_smoothText;
@@ -146,7 +147,7 @@ if (isPlayer _owner) then {
 							TRUE,
 							FALSE,
 							"",
-							"alive _target && group _this == (_target getVariable ['BIS_WL_ownerGrp', grpNull]) && vehicle _this == _this",
+							"alive _target && (getPlayerUID player) == (_target getVariable ['BIS_WL_ownerAsset', objNull]) && vehicle _this == _this",
 							WL_MAINTENANCE_RADIUS,
 							FALSE
 						];
@@ -169,16 +170,16 @@ if (isPlayer _owner) then {
 								if ((_asset getVariable "BIS_WL_nextRearm") <= WL_SYNCED_TIME) then {
 									_curWeapon = currentWeapon _asset;
 									{
-											if (_asset isKindOf "LandVehicle") then {
-												
-												private _turret = _x;
-												private _mags = (_asset getVariable "BIS_WL_defaultMagazines") # _forEachIndex;
-												{											
-													  	_asset removeMagazineTurret [_x, _turret];
-														_asset setVehicleAmmoDef 1; //_asset addMagazineTurret [_x, _turret];
-												} forEach _mags;
-																				 
-											};
+										if (_asset isKindOf "LandVehicle") then {
+											
+											private _turret = _x;
+											private _mags = (_asset getVariable "BIS_WL_defaultMagazines") # _forEachIndex;
+											{											
+													_asset removeMagazineTurret [_x, _turret];
+													[_asset, 1]remoteExec ["setVehicleAmmoDef", 0, true];
+											} forEach _mags;
+																				
+										};
 									} forEach allTurrets _asset;
 
 									_asset spawn DAPS_fnc_RearmAPS;
@@ -188,7 +189,6 @@ if (isPlayer _owner) then {
 
 									_asset selectWeapon _curWeapon;
 
-									////Beta   
 									if (_asset isKindOf "Helicopter") then {  
 										_asset setVariable ["BIS_WL_nextRearm", WL_SYNCED_TIME + WL_MAINTENANCE_COOLDOWN_REARM_Helicopter]; 
 									} else { if (_asset isKindOf "Plane") then {  
@@ -213,8 +213,11 @@ if (isPlayer _owner) then {
 																			_asset setVariable ["BIS_WL_nextRearm", WL_SYNCED_TIME + WL_MAINTENANCE_COOLDOWN_REARM_Centurion];
 																			} else { if (_asset isKindOf "B_Ship_MRLS_01_F") then {  
 																				_asset setVariable ["BIS_WL_nextRearm", WL_SYNCED_TIME + WL_MAINTENANCE_COOLDOWN_REARM_VLS];
-																				} else { 
-																					_asset setVariable ["BIS_WL_nextRearm", WL_SYNCED_TIME + WL_MAINTENANCE_COOLDOWN_REARM];
+																				} else { if (_asset isKindOf "B_MBT_01_mlrs_F") then {
+																					_asset setVariable ["BIS_WL_nextRearm", WL_SYNCED_TIME + WL_MAINTENANCE_COOLDOWN_REARM_Artillery];
+																					} else {
+																						_asset setVariable ["BIS_WL_nextRearm", WL_SYNCED_TIME + WL_MAINTENANCE_COOLDOWN_REARM];
+																					};
 																				};
 																			};
 																		};
@@ -227,7 +230,6 @@ if (isPlayer _owner) then {
 											};
 										};
 									};   
-									////Beta
 									
 									playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, FALSE, getPosASL _asset, 2, 1, 75];
 									[toUpper localize "STR_A3_WL_popup_asset_rearmed"] spawn BIS_fnc_WL2_smoothText;
@@ -240,7 +242,7 @@ if (isPlayer _owner) then {
 							TRUE,
 							FALSE,
 							"",
-							"alive _target && group _this == (_target getVariable ['BIS_WL_ownerGrp', grpNull]) && vehicle _this == _this",
+							"alive _target && (getPlayerUID player) == (_target getVariable ['BIS_WL_ownerAsset', objNull]) && vehicle _this == _this",
 							WL_MAINTENANCE_RADIUS,
 							FALSE
 						];
@@ -284,6 +286,20 @@ if (isPlayer _owner) then {
 					_asset setObjectTextureGlobal [2, "A3\Soft_F_EPC\Truck_03\Data\Truck_03_ammo_CO.paa"]; //Truck Bed
 				};
 			};
+
+			if (typeOf _asset == "B_Plane_Fighter_01_F" || typeOf _asset == "B_Plane_CAS_01_dynamicLoadout_F") then {
+				_asset addEventHandler ["Gear", {
+					params ["_vehicle", "_gearState"];
+					if (_gearState == true) then {
+						_vehicle setVariable ["landingGear", true, true];
+					} else {
+						_vehicle setVariable ["landingGear", false, true];
+					};
+				}];
+				_asset setVariable ["landingGear", true, true];
+				_asset setVariable ["bettyEnabled", false, true];
+				_asset call BIS_fnc_WL2_sub_bettyAction;
+			};
 		};
 		
 		_asset addEventHandler ["Killed", {
@@ -300,17 +316,22 @@ if (isPlayer _owner) then {
 	private _removeActionID = _asset addAction [
 		"",
 		{
-			_ownedVehiclesVarName = format ["BIS_WL_%1_ownedVehicles", getPlayerUID player];
-			missionNamespace setVariable [_ownedVehiclesVarName, WL_PLAYER_VEHS - [_this # 0]];
-			publicVariableServer _ownedVehiclesVarName;
-			(_this # 0) call BIS_fnc_WL2_sub_deleteAsset;
+			_displayName = getText (configFile >> "CfgVehicles" >> (typeOf (_this # 0)) >> "displayName");
+			_result = [format ["Are you sure you would like to delete: %1", _displayName], "Delete asset", true, true] call BIS_fnc_guiMessage;
+
+			if (_result) exitWith {
+				_ownedVehiclesVarName = format ["BIS_WL_%1_ownedVehicles", getPlayerUID player];
+				missionNamespace setVariable [_ownedVehiclesVarName, WL_PLAYER_VEHS - [_this # 0]];
+				publicVariableServer _ownedVehiclesVarName;
+				(_this # 0) call BIS_fnc_WL2_sub_deleteAsset;
+			};
 		},
 		[],
 		-100,
 		false,
 		true,
 		"",
-		"alive _target && vehicle _this != _target && group _this == (_target getVariable ['BIS_WL_ownerGrp', grpNull])",
+		"alive _target && vehicle _this != _target && (getPlayerUID player) == (_target getVariable ['BIS_WL_ownerAsset', objNull])",
 		30,
 		false
 	];

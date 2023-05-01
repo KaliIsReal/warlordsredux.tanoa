@@ -1,7 +1,7 @@
 #include "..\warlords_constants.inc"
 
 //CP databse
-moneyDatabase = createHashmap;
+serverNamespace setVariable ["fundsDatabase", createHashMap];
 
 // Mine Array's
 MRTM_spawnedAPERS = [];
@@ -29,6 +29,7 @@ missionNamespace setVariable ["imbalance", 0, true];
 missionNamespace setVariable ["serverTimer", 0, true];
 
 [36000] call BIS_fnc_countdown;
+0 spawn BIS_fnc_WL2_killRewards;
 
 
 ["server_init"] call BIS_fnc_startLoadingScreen;
@@ -49,7 +50,7 @@ EAST setFriend [CIVILIAN, 1];
 RESISTANCE setFriend [CIVILIAN, 1];
 
 //this part sets fog and rain to zero
-[] spawn {
+0 spawn {
 	while {TRUE} do {
 		_overcastPreset = random 1;
 		(7200 * timeMultiplier) setOvercast _overcastPreset;
@@ -71,6 +72,12 @@ addMissionEventHandler ["HandleDisconnect", {
 	};
 
 	{
+		if (typeOf _x == "B_Truck_01_medical_F") then {
+			missionNamespace setVariable ["ftVehicleExistsBlu", false, true];
+		};
+		if (typeOf _x == "O_Truck_03_medical_F") then {
+			missionNamespace setVariable ["ftVehicleExistsOpf", false, true];
+		};
 		_x call BIS_fnc_WL2_sub_deleteAsset;
 	} forEach (missionNamespace getVariable format ["BIS_WL_%1_ownedVehicles", _uid]);
 	
@@ -78,13 +85,22 @@ addMissionEventHandler ["HandleDisconnect", {
 		if !(isPlayer _x) then {_x setDamage 1};
 	} forEach ((units group _unit) - [_unit]);
 	
-	missionNamespace setVariable [format ["BIS_WL_%1", _uid], nil];
 	missionNamespace setVariable [format ["BIS_WL_%1_ownedVehicles", _uid], nil];
 }];
 
+addMissionEventHandler ["MarkerCreated", {
+	params ["_marker", "_channelNumber", "_owner", "_local"];
+	
+	if ((isPlayer _owner) && (_channelNumber == 0)) then {
+		deleteMarker _marker;
+	};
+}];
 
 addMissionEventHandler ["EntityKilled", {
 	params ["_unit", "_killer", "_instigator", "_useEffects"];
+	_this spawn BIS_fnc_WL2_killRewardHandle;
+	_this call BIS_fnc_WL2_friendlyFireHandleServer;
+
 	if (typeOf _unit == "B_Truck_01_medical_F") then {
 		missionNamespace setVariable ["ftVehicleExistsBlu", false, true];
 	};
@@ -94,10 +110,9 @@ addMissionEventHandler ["EntityKilled", {
 	};
 }];
 
-
 addMissionEventHandler ["EntityCreated", {
 	params ["_entity"];
-	if (typeOf _entity == "B_UGV_01_rcws_F" || typeOf _entity == "B_UGV_02_Demining_F" || typeOf _entity == "O_UGV_01_rcws_F" || typeOf _entity == "O_UGV_02_Demining_F") then {
+	if (typeOf _entity == "B_UGV_01_rcws_F" || typeOf _entity == "B_UGV_02_Demining_F" || typeOf _entity == "O_UGV_01_rcws_F" || typeOf _entity == "O_UGV_02_Demining_F" || typeOf _entity == "O_Truck_03_medical_F" || typeOf _entity == "B_Truck_01_medical_F" || typeOf _entity == "O_APC_Wheeled_02_rcws_v2_F") then {
 		[_entity] spawn {
 			_entity = _this select 0;
 			while {alive _entity} do {
@@ -106,34 +121,6 @@ addMissionEventHandler ["EntityCreated", {
 					_entity setDamage 1;
 				};
 				sleep 5;
-			};
-		};
-	};
-
-    if (typeOf _entity == "I_Truck_02_MRL_F") then { //Zamak MLRS
-        _entity setObjectTextureGlobal [0, "A3\armor_f_gamma\mbt_01\data\mbt_01_scorcher_hexarid_co.paa"]; //Zamak cabin
-        //_entity setObjectTextureGlobal [1, "A3\armor_f_gamma\mbt_02\data\mbt_02_body_co.paa"]; //Does nothing but keep for reminder
-        _entity setObjectTextureGlobal [2, "A3\armor_f_gamma\mbt_01\data\mbt_01_scorcher_hexarid_co.paa"]; //Zamak Bed&Launcher                
-    };
-	
-	if (typeOf _entity == "B_AAA_System_01_F") then { //Praetorian
-		private _side = side (crew _entity select 0);
-		if (_side == east) then {
-			_entity setObjectTextureGlobal [0, "A3\static_f_jets\AAA_System_01\data\AAA_system_01_olive_co.paa"];
-			_entity setObjectTextureGlobal [1, "A3\static_f_jets\AAA_System_01\data\AAA_system_02_olive_co.paa"];
-		};
-	} else {
-		if (typeOf _entity == "B_SAM_System_01_F") then { //Spartan
-			private _side = side (crew _entity select 0);
-			if (_side == east) then {
-				_entity setObjectTextureGlobal [0, "A3\static_f_jets\SAM_System_01\data\SAM_system_01_olive_co.paa"];
-			};
-		} else {
-			if (typeOf _entity == "B_SAM_System_02_F") then { //Centurion
-				private _side = side (crew _entity select 0);
-				if (_side == east) then {
-					_entity setObjectTextureGlobal [0, "A3\static_f_jets\SAM_System_02\data\SAM_system_02_olive_co.paa"];
-				};
 			};
 		};
 	};
@@ -150,19 +137,19 @@ call BIS_fnc_WL2_loadFactionClasses;
 call BIS_fnc_WL2_sectorsInitServer;
 "setup" call BIS_fnc_WL2_handleRespawnMarkers;
 {_x call BIS_fnc_WL2_parsePurchaseList} forEach BIS_WL_competingSides;
-[] spawn BIS_fnc_WL2_detectNewPlayers;
+0 spawn BIS_fnc_WL2_detectNewPlayers;
 ["server", TRUE] call BIS_fnc_WL2_updateSectorArrays;
-[] spawn BIS_fnc_WL2_targetSelectionHandleServer;
-[] spawn BIS_fnc_WL2_zoneRestrictionHandleServer;
-[] spawn BIS_fnc_WL2_incomePayoff;
-[] spawn BIS_fnc_WL2_garbageCollector;
-[] spawn BIS_fnc_WL2_targetResetHandleServer;
+0 spawn BIS_fnc_WL2_targetSelectionHandleServer;
+0 spawn BIS_fnc_WL2_zoneRestrictionHandleServer;
+0 spawn BIS_fnc_WL2_incomePayoff;
+0 spawn BIS_fnc_WL2_garbageCollector;
+0 spawn BIS_fnc_WL2_targetResetHandleServer;
 
 setTimeMultiplier BIS_WL_timeMultiplier;
 private _spaceLukkie = createSimpleObject ["\A3\Structures_F\Civ\Dead\HumanSkeleton_F.p3d", [17366.8,12577.2,18.2285]];
 _spaceLukkie setDir 122;
 
-[] spawn {
+0 spawn {
 	while {TRUE} do {
 		waitUntil {sleep WL_TIMEOUT_LONG; daytime > 20 || daytime < 5};
 		setTimeMultiplier ((BIS_WL_timeMultiplier * 4) min 24);
@@ -185,5 +172,7 @@ _spaceLukkie setDir 122;
 } forEach BIS_WL_competingSides;
 
 [] remoteExec ["BIS_fnc_WL2_mineLimit", 2];
+
+["Initialize"] call BIS_fnc_dynamicGroups;
 
 ["server_init"] call BIS_fnc_endLoadingScreen;

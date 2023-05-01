@@ -1,3 +1,5 @@
+#define IDC_OK            1 // emulate "Ok" button
+#define IDC_CANCEL        2 // emulate "Cancel" button
 #define WL_RESPAWN_MARKERS_CNT 20
 #define WL_ZONE_RESTRICTION_KILL_TIMEOUT_INFANTRY 120
 #define WL_ZONE_RESTRICTION_KILL_TIMEOUT_VEHICLES 120
@@ -46,11 +48,11 @@
 #define WL_ASSET_SCENE_ICON_DURATION 90
 #define WL_FRIENDLY_FIRE_RECORD_DURATION 1200
 #define WL_FRIENDLY_FIRE_THRESHOLD 2
-#define WL_FRIENDLY_FIRE_PENALTY 180
-#define WL_FRIENDLY_FIRE_PENALTY_MAX 600
-#define WL_MAINTENANCE_RADIUS 50
-#define WL_MAINTENANCE_COOLDOWN_REPAIR 300
-#define WL_MAINTENANCE_COOLDOWN_REARM 300
+#define WL_FRIENDLY_FIRE_PENALTY 600
+#define WL_FRIENDLY_FIRE_PENALTY_MAX 3600
+#define WL_MAINTENANCE_RADIUS 30
+#define WL_MAINTENANCE_COOLDOWN_REPAIR 600
+#define WL_MAINTENANCE_COOLDOWN_REARM 600
 #define WL_MAINTENANCE_COOLDOWN_REARM_Helicopter 600
 #define WL_MAINTENANCE_COOLDOWN_REARM_Jets 1200
 #define WL_MAINTENANCE_COOLDOWN_REARM_Mortar 900
@@ -69,13 +71,12 @@
 #define RD_KILL_REWARD_MOD 4444  //Original value 10,000
 #define RD_GARRISON_SIZE_MOD 2.5  //Original value 2; adjust this to increase total INF spawning in an AI sector. 
 #define RD_DISABLE_TEAM_SWITCHING 1  //default 1; 1 = Team switching disabled; 2 = Team switching enabled
-#define RD_UAVCOUNT_DELETE_THRESHOLD 30 //Original value 50;  
 #define WL_SYNCED_TIME (call BIS_fnc_WL2_syncedTime)
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide])
 #define WL_TARGET_ENEMY (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
 #define WL_DISPLAY_MAIN (findDisplay 46)
-#define WL_PLAYER_FUNDS (player getVariable ["BIS_WL_funds", -1])
+#define WL_PLAYER_FUNDS ((missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player))
 #define WL_PLAYER_REQUISITION_LIST (missionNamespace getVariable format ["BIS_WL_purchasable_%1", BIS_WL_playerSide])
 #define WL_REQUISITION_CATEGORIES ["Infantry", "Vehicles", "Aircraft", "Naval", "Defences", "Gear", "Strategy"]
 #define WL_PLAYER_VEHS (missionNamespace getVariable [format ["BIS_WL_%1_ownedVehicles", getPlayerUID player], []])

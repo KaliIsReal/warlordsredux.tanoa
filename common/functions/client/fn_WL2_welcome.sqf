@@ -2,19 +2,25 @@
 
 createDialog ["welcomeScreen", true];
 
-howRead = false;
-
 (findDisplay 6969) displayAddEventhandler ["KeyDown",{
 	if (dialog) then {
-		(_this select 1) isEqualTo 1;
+		_button = (_this select 1);
+		switch (_button) do {
+			case 1: {true};
+			case 15: {true};
+			case 56: {true};
+			default {false};
+		};
 	};
 }];
 
-_ctrlButton = findDisplay 6969 displayCtrl 6969691;
-_ctrlButton ctrlAddEventHandler ["onMouseButtonClick", {
-	params ["_control", "_button", "_xPos", "_yPos", "_shift", "_ctrl", "_alt"];
-	closeDialog 2;
-}];
+0 spawn {
+	while {dialog} do {
+		_time = serverTime + 7;
+		waitUntil {sleep 0.1; serverTime > _time};
+		ctrlEnable [1, true];
+	};
+};
 
 if (side player == west) then {
 	private _control1 = findDisplay 6969 displayCtrl 69692;
@@ -54,13 +60,6 @@ while {dialog} do {
 	_index = lbCurSel 69695;
 	_curSel = lbData [69695, _index];
 
-	if (howRead == false) then {
-		ctrlShow [6969691, true];
-		ctrlSetText [6969691, localize "STR_MRTM_welcomeInteract_21"];
-	} else {
-		ctrlShow [6969691, false];
-	};
-
 	lbSetText[69695, _pageAbt, localize "STR_MRTM_welcomeInteract_01"];
 	lbSetText[69695, _pageHow, localize "STR_MRTM_welcomeInteract_02"];
 	lbSetText[69695, _theTeam, localize "STR_MRTM_welcomeInteract_03"];
@@ -68,7 +67,9 @@ while {dialog} do {
 	lbSetText[69695, _changelog, localize "STR_MRTM_welcomeInteract_05"];
 	lbSetText[69695, _scripts, localize "STR_MRTM_welcomeInteract_06"];
 
-	inventoryKey = actionKeysNames "gear";
+	_inventoryKey = actionKeysNames "gear";
+	_groupKey = actionKeysNames "teamSwitch";
+	_gearKey = actionKeysNames "cycleThrownItems";
 
 	switch (_curSel) do {
 		case "pageAbt": {
@@ -87,7 +88,6 @@ while {dialog} do {
 		};
 
 		case "pageHow": {
-			howRead = true;
 			ctrlSetText [69694, "img\wl.paa"];
 
 			private _control = findDisplay 6969 displayCtrl 69696;
@@ -99,9 +99,10 @@ while {dialog} do {
 			parseText format ["<a href='https://www.youtube.com/watch?v=mlZTCnWLgJg'>Walords Redux Guide from Ferrous Creek</a>"], lineBreak,
 			"", lineBreak,
 			localize "STR_MRTM_welcomeInteract_11", lineBreak,
-			format [ localize "STR_MRTM_welcomeInteract_12", inventoryKey], lineBreak,
+			format [localize "STR_MRTM_welcomeInteract_12", _inventoryKey], lineBreak,
+			format [localize "STR_MRTM_welcomeInteract_22", _groupKey], lineBreak,
 			localize "STR_MRTM_welcomeInteract_13", lineBreak,
-			localize "STR_MRTM_welcomeInteract_14", lineBreak,
+			format [localize "STR_MRTM_welcomeInteract_14", _gearKey], lineBreak,
 			""
 			];
 		};
@@ -123,7 +124,6 @@ while {dialog} do {
 			localize "STR_MRTM_welcomeInteract_17", lineBreak,
 			"- MrThomasM", lineBreak,
 			"- Tin", lineBreak,
-			"- 爪卂尺ﾉﾉ", lineBreak,
 			"", lineBreak,
 			localize "STR_MRTM_welcomeInteract_18", lineBreak,
 			"- Witch Doctor", lineBreak,
@@ -154,6 +154,39 @@ while {dialog} do {
 
 			private _control = findDisplay 6969 displayCtrl 69696;
 			_control ctrlSetStructuredText composeText [
+			"2.5.3", lineBreak,
+			"-New CP system. (Should be more secure against cheaters)", lineBreak,
+			"-Added the dynamic group system.", lineBreak,
+			"-New improved map icons.", lineBreak,
+			"-Gorgon has new camo.", lineBreak,
+			"-Performance updates. (both client and server)", lineBreak,
+			"-Arsenal reworked. (More options added)", lineBreak,
+			"-APS Upgrades added.", lineBreak,
+			"-Friendly fire forgive or report option is added.", lineBreak,
+			"-APS double deduction is now fixed.", lineBreak,
+			"-Fast travel truck not available when owner leaves is now fixed.", lineBreak,
+			"-Ammo truck ammo is now 30ton instead of 10ton", lineBreak,
+			"", lineBreak,
+			"2.5.2", lineBreak,
+			"-Added the famous 'Bitching' betty to NATO's wipeout and blackwasp.", lineBreak,
+			parseText format ["<a href='https://www.youtube.com/watch?v=zg8FcRgOfPY'>Bitching betty preview.</a>"], lineBreak,
+			"-Arsenal reworked.", lineBreak,
+			"-New map icons.", lineBreak,
+			"", lineBreak,
+			"2.5.1", lineBreak,
+			"-UAV limit to 2 again.", lineBreak,
+			"-Added drones under the aircraft section to autonomous limit.", lineBreak,
+			"-Remote designator added.", lineBreak,
+			"-Added a confirmation when deleting assets.", lineBreak,
+			"-Fixed arsenal - inventory exploit.", lineBreak,
+			"-Improved server performance.", lineBreak,
+			"-Stopped players from connecting to unowned drone.", lineBreak,
+			"-Increased CP balance.", lineBreak,
+			"-Stopped players from having unlimited rockets on their aircrafts.", lineBreak,
+			"-Player slot count now 40 Nato - 40 Csat to allow for better balancing.", lineBreak,
+			"-Removed UAV cleanup code.", lineBreak,
+			"-Fixed chat spam on ai availability.", lineBreak,
+			"", lineBreak,
 			"2.5", lineBreak,
 			"-CP is saved every 5 minutes.", lineBreak,
 			"-CP is saved after every funds transfer for each person.", lineBreak,

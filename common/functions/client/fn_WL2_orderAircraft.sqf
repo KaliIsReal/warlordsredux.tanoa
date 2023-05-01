@@ -25,15 +25,10 @@ if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_AIRCRAFT) then {
 };
 
 if (isNull BIS_WL_targetSector) exitWith {
-	[player, _cost] call BIS_fnc_WL2_fundsControl;
-	private  _id = clientOwner;
-	[] remoteExec ["BIS_fnc_WL2_clientFundsUpdate",  _id];
 	"Canceled" call BIS_fnc_WL2_announcer;
 	[toUpper localize "STR_A3_WL_deploy_canceled"] spawn BIS_fnc_WL2_smoothText;
 };
 
 [toUpper localize "STR_A3_WL_asset_dispatched_TODO_REWRITE"] spawn BIS_fnc_WL2_smoothText;
 
-_asset = ["requestAsset", [_class, BIS_WL_targetSector]] call BIS_fnc_WL2_sendClientRequest;
-
-[player, _asset] call BIS_fnc_WL2_newAssetHandle;
+[player, "orderAsset", _cost, BIS_WL_targetSector, _class, false] remoteExec ["BIS_fnc_WL2_handleClientRequest", 2];
