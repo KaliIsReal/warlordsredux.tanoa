@@ -81,7 +81,7 @@ while {dialog} do {
 
 	switch (_curSel) do {
 		case "pageAbt": {
-			ctrlSetText [69694, "img\wl_logo_ca.paa"];
+			ctrlSetText [69694, "common\img\wl_logo_ca.paa"];
 
 			private _control = findDisplay 6969 displayCtrl 69696;
 			_control ctrlSetStructuredText composeText [
@@ -96,7 +96,7 @@ while {dialog} do {
 		};
 
 		case "pageHow": {
-			ctrlSetText [69694, "img\wl.paa"];
+			ctrlSetText [69694, "common\img\wl.paa"];
 			hRead = true;
 
 			private _control = findDisplay 6969 displayCtrl 69696;
@@ -116,7 +116,7 @@ while {dialog} do {
 		};
 
 		case "theCom": { 
-			ctrlSetText [69694, "img\sniper.paa"];
+			ctrlSetText [69694, "common\img\sniper.paa"];
 
 			private _control = findDisplay 6969 displayCtrl 69696;
 			_control ctrlSetStructuredText composeText [
@@ -144,7 +144,7 @@ while {dialog} do {
 		};
 
 		case "discord": { 
-			ctrlSetText [69694, "img\wasp.paa"];
+			ctrlSetText [69694, "common\img\wasp.paa"];
 
 			private _control = findDisplay 6969 displayCtrl 69696;
 			_control ctrlSetStructuredText composeText [
@@ -158,7 +158,7 @@ while {dialog} do {
 		};
 
 		case "changelog": {
-			ctrlSetText [69694, "img\arma.paa"]; 
+			ctrlSetText [69694, "common\img\arma.paa"]; 
 
 			private _control = findDisplay 6969 displayCtrl 69696;
 			_control ctrlSetStructuredText composeText [
@@ -333,7 +333,7 @@ while {dialog} do {
 
 		//Scripts
 		case "scripts": { 
-			ctrlSetText [69694, "img\wl_logo_ca.paa"];
+			ctrlSetText [69694, "common\img\wl_logo_ca.paa"];
 			
 			private _control = findDisplay 6969 displayCtrl 69696;
 			_control ctrlSetStructuredText composeText [
