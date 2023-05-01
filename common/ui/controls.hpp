@@ -31,7 +31,7 @@ class welcomeScreen
 		{
 			idc = 69691;
 			deletable = 0;
-			text = "common\img\altis.paa";
+			text = "common\img\background.paa";
 			style = ST_MULTI + ST_TITLE_BAR;
 			x = 0.257656 * safezoneW + safezoneX;
 			y = 0.181 * safezoneH + safezoneY;
