@@ -11,4 +11,4 @@ if !(isNull _parentSector) then {
 		waitUntil {sleep WL_TIMEOUT_MAX; (_parentSector getVariable "BIS_WL_owner") != _originalOwner && BIS_WL_allWarlords findIf {_x distance2D _asset < WL_ASSET_IRRELEVANT_RANGE} == -1};
 		_asset setDamage 1;
 	};
-};
+};															
