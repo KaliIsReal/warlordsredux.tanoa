@@ -136,5 +136,39 @@
   - Fixed the asset limit bug.
   - Added DAZZLER defense for the device truck, added to both sides. Type of electronic warfare defense to confuse incoming guided missiles in a dome of 300m around truck, also effects outgoing.  We'll likely dive into EW in 2.6 and make more fun stuff.
   - Removed the Hint when near a repair or rearm source and replaced it with a green line under the lower right OSD.
-  
+
+2.5.1
+
+  - Remote designator added.
+  - Added a confirmation when deleting assets.
+  - Fixed arsenal - inventory exploit.
+  - Improved server performance.
+  - Stopped players from connecting to unowned drone.
+  - Increased CP balance.
+  - Stopped players from having unlimited rockets on their aircrafts.
+  - Player slot count now 40 Nato - 40 Csat to allow for better balancing.
+  - Removed UAV cleanup code.
+  - Fixed chat spam on ai availability.
+  - UAV limit to 2 again
+  - Added drones under the aircraft section to autonomous limit.
+
+2.5.2
+  - Added the famous 'Bitching' betty to NATO's wipeout and blackwasp. (https://www.youtube.com/watch?v=zg8FcRgOfPY&t=22s)
+  - New map icons.
+  - Arsenal reworked.
+
+2.5.3
+  - New CP system. (Should be more secure against cheaters)
+  - Added the dynamic group system.
+  - New improved map icons.
+  - Gorgon has new camo.
+  - Performance updates. (both client and server)
+  - Arsenal reworked. (More options added)
+  - APS Upgrades added.
+  - Friendly fire forgive or report option is added.
+  - APS double deduction is now fixed.
+  - Fast travel truck not available when owner leaves is now fixed.
+  - Hemtt ammo capacity is now 30ton instead of 10t (ammo box is still 10ton).
+
+
   
